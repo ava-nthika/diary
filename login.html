@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="grid cols-2">
+  <div class="card">
+    <div class="title">Welcome back ☺️</div>
+    <div class="subtitle">Log in to your cozy weather space.</div>
+    <form method="POST" autocomplete="off">
+      <div class="field">
+        <label>Username</label>
+        <input type="text" name="username" placeholder="Your username" required />
+      </div>
+      <div class="field">
+        <label>Password</label>
+        <input type="password" name="password" placeholder="Your password" required />
+      </div>
+      <button class="btn btn-primary" type="submit">Log In</button>
+      <p class="muted" style="margin-top:10px;">New here?
+        <a href="{{ url_for('signup') }}">Create an account</a>
+      </p>
+    </form>
+  </div>
+
+  <div class="card center">
+    <div style="text-align:center;max-width:420px">
+      <div style="font-size:64px">☀️🌤️⛅☁️🌧️</div>
+      <h3>Stay ahead of the skies</h3>
+      <p class="muted">Cute UI, real data. Find temps, wind, and rain chances in seconds.</p>
+    </div>
+  </div>
+</div>
+{% endblock %}

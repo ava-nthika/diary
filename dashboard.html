@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="grid cols-2">
+  <div class="card">
+    <div class="title">Search a city 🌍</div>
+    <form method="POST" autocomplete="off">
+      <div class="field">
+        <label>City name</label>
+        <input type="text" name="city" placeholder="e.g., Chennai, Tokyo, Paris" required />
+      </div>
+      <button class="btn btn-primary" type="submit">Get Weather</button>
+    </form>
+    <p class="muted" style="margin-top:10px">Tip: Try your hometown and favorite travel spots!</p>
+  </div>
+
+  <div class="card">
+    {% if not weather %}
+      <div style="text-align:center;padding:20px">
+        <div style="font-size:54px">🧸</div>
+        <h3>Nothing yet</h3>
+        <p class="muted">Search a city to see the current vibe & 5-day outlook.</p>
+      </div>
+    {% else %}
+      <div class="title">
+        {{ place.name }}, {{ place.country }} <span class="muted" style="font-size:16px">found ✅</span>
+      </div>
+      <div class="grid" style="grid-template-columns: 1fr 1fr; gap:14px">
+        <div class="card" style="border:1px dashed #efeefe;background:#fcfbff">
+          <div style="font-size:32px;margin-bottom:6px">
+            {{ describe_code(weather.current.weathercode) }}
+          </div>
+          <div style="font-size:40px;font-weight:800;line-height:1">
+            {{ weather.current.temperature }}°C
+          </div>
+          <div class="muted" style="margin-top:6px">
+            Wind: {{ weather.current.windspeed }} km/h • {{ weather.current.winddirection }}°
+          </div>
+          <div class="muted">
+            Time: {{ weather.current.time }}
+          </div>
+        </div>
+
+        <div class="card" style="border:1px dashed #efeefe;background:#fcfbff">
+          <div style="font-weight:700;margin-bottom:6px">Quick facts</div>
+          <ul style="margin:0;padding-left:18px;line-height:1.9">
+            <li>Auto timezone handled</li>
+            <li>No API keys required</li>
+            <li>Data source: Open-Meteo</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="title" style="margin-top:10px">5-Day Forecast 📅</div>
+      <div class="grid" style="grid-template-columns: repeat(5, 1fr); gap:12px">
+        {% for d in weather.forecast %}
+          <div class="card" style="padding:14px">
+            <div style="font-weight:800">{{ d.date }}</div>
+            <div class="muted" style="font-size:14px;margin:6px 0">{{ describe_code(d.wcode) }}</div>
+            <div style="font-weight:700">↑ {{ d.tmax }}°C</div>
+            <div style="font-weight:700">↓ {{ d.tmin }}°C</div>
+            <div class="muted" style="font-size:14px">Rain chance: {{ d.prcp if d.prcp is not none else "—" }}%</div>
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

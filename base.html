@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>{{ title if title else "Cozy Weather" }}</title>
+  <style>
+    :root{
+      --bg: #f7f5ff;
+      --card: #ffffff;
+      --ink: #2d2a32;
+      --muted: #6b6b76;
+      --accent: #7c6cf4;
+      --accent-2:#f48fb1;
+      --ring: #d8d4ff;
+      --success:#30b36b;
+      --danger:#ef5a76;
+      --warning:#e7a23b;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: ui-rounded, "Segoe UI", system-ui, -apple-system, "Noto Sans", Roboto, Arial, sans-serif;
+      color:var(--ink);
+      background:
+        radial-gradient(1200px 600px at -10% -10%, #ffe9f1 0%, transparent 60%),
+        radial-gradient(1000px 500px at 110% -10%, #e9efff 0%, transparent 60%),
+        radial-gradient(1200px 600px at 50% 120%, #e8fff3 0%, transparent 60%),
+        var(--bg);
+      min-height:100vh;
+    }
+    a{color:var(--accent);text-decoration:none}
+    .container{
+      max-width:980px;margin:0 auto;padding:24px;
+    }
+    .nav{
+      display:flex;align-items:center;justify-content:space-between;
+      padding:16px 20px;margin:16px auto 8px;
+      background:rgba(255,255,255,0.7);backdrop-filter: blur(10px);
+      border:1px solid #eee;border-radius:20px;
+      box-shadow: 0 10px 30px rgba(124,108,244,0.1);
+    }
+    .brand{
+      display:flex;gap:10px;align-items:center;font-weight:700;
+      letter-spacing:.3px
+    }
+    .brand .logo{
+      height:34px;width:34px;border-radius:12px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      display:grid;place-items:center;color:white;font-size:18px;
+      box-shadow: 0 6px 18px rgba(124,108,244,0.35);
+    }
+    .nav a.btn{
+      padding:10px 16px;border-radius:14px;border:1px solid var(--ring);
+      background: white; font-weight:600;
+    }
+    .btn-primary{
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color:white;border:none; box-shadow: 0 10px 24px rgba(124,108,244,0.35);
+    }
+    .btn-ghost{
+      background: white;color:var(--ink)
+    }
+    .grid{
+      display:grid;gap:18px;
+    }
+    @media(min-width:800px){ .grid.cols-2{grid-template-columns:1fr 1fr} }
+    .card{
+      background: var(--card);border-radius:24px;padding:20px;border:1px solid #eee;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.06);
+    }
+    .title{
+      font-size:28px;line-height:1.2;margin:6px 0 14px;font-weight:800;
+    }
+    .subtitle{color:var(--muted);margin-top:-8px;margin-bottom:10px}
+    form .field{display:grid;gap:6px;margin-bottom:14px}
+    input[type="text"], input[type="password"]{
+      padding:12px 14px;border-radius:14px;border:1px solid #e9e7ff;background:white;
+      outline:none;font-size:16px;
+    }
+    input:focus{border-color:var(--accent); box-shadow: 0 0 0 4px rgba(124,108,244,0.15)}
+    .alert{
+      padding:12px 14px;border-radius:14px;margin:10px 0;font-weight:600;
+    }
+    .alert.success{background:#eafff3;color:#116d3d;border:1px solid #bbefd3}
+    .alert.danger{background:#ffe9ef;color:#7e1230;border:1px solid #ffc2d0}
+    .alert.warning{background:#fff6e6;color:#7a4f10;border:1px solid #ffe0aa}
+    .alert.info{background:#eef3ff;color:#1a2a78;border:1px solid #d7e0ff}
+    .pill{
+      display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;
+      background:#f3f1ff;border:1px solid var(--ring);font-weight:600;
+    }
+    .muted{color:var(--muted)}
+    .footer{ text-align:center;color:var(--muted);padding:26px }
+    .center{display:grid;place-items:center}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="nav">
+      <div class="brand">
+        <div class="logo">☁️</div>
+        <div>Cozy Weather</div>
+      </div>
+      <div>
+        {% if session.get('user_id') %}
+          <span class="pill">Hi, {{ session.get('username') }} ✨</span>
+          <a class="btn btn-ghost" href="{{ url_for('dashboard') }}">Dashboard</a>
+          <a class="btn btn-primary" href="{{ url_for('logout') }}">Logout</a>
+        {% else %}
+          <a class="btn btn-ghost" href="{{ url_for('login') }}">Login</a>
+          <a class="btn btn-primary" href="{{ url_for('signup') }}">Sign up</a>
+        {% endif %}
+      </div>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, msg in messages %}
+          <div class="alert {{ category }}">{{ msg }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    {% block content %}{% endblock %}
+    <div class="footer">made with 💜 & hot chai</div>
+  </div>
+</body>
+</html>
